@@ -4,7 +4,7 @@ import os
 #imports OS specific stuff to be more cross compatable
 import random
 #hehe
-WIDTH, HEIGHT = random.randint(3,10)*100,1000
+WIDTH, HEIGHT = 500,800
 #this is window size
 WIN = pygame.display.set_mode((WIDTH,HEIGHT))
 #this acts as the window to more easily edit
@@ -17,7 +17,7 @@ TEXT_COL = 255,255,255
 pygame.font.init()
 FONTSIZE = 24
 font = pygame.font.SysFont("cascadia-code",FONTSIZE)
-MAXFPS = 2
+MAXFPS = 24
 def draw_text (text,font,text_col,x,y):
 	img = font.render(text,True,text_col)
 	WIN.blit(img,(x,y))
@@ -29,7 +29,7 @@ def draw_window():
         WIN.fill((MAINBGCOLOUR))
         text_rect = pygame.Rect((WIDTH*0.2,100),(WIDTH* 0.6 ,100))
         pygame.draw.rect(WIN,(BUTTONBGCOLOUR),text_rect)
-        text = "percent testing"
+        text = "mouse pos" + str(pygame.mouse.get_pos()) 
         draw_text(text,font,(TEXT_COL),WIDTH /2 - len(text)/2 *14,130)
 
 
