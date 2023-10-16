@@ -4,7 +4,7 @@ import os
 #imports OS specific stuff to be more cross compatable
 import random
 #hehe
-WIDTH, HEIGHT = 500,800
+WIDTH, HEIGHT = 500,300
 #this is window size
 WIN = pygame.display.set_mode((WIDTH,HEIGHT))
 #this acts as the window to more easily edit
