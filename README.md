@@ -7,3 +7,5 @@ the actions you can take by default as buttons to preform, with
 any bonuses as easy add ons to the roll
 and then even more optionally have the outcome print out to whatever 
 VTT were using
+
+also, sorry for the comment spam, i use them to remember what to do
