@@ -1,15 +1,16 @@
 #what am i trying to do?
 #a basic GUI that contains buttons on a menu that show different info,
 #rolls stats for a character and stores it in a way that it can be 
-#easily sent as a character file, optionally id also like to have all 
-#the actions you can take by default as buttons to preform, with 
-#any bonuses as easy add ons to the roll
+#easily sent as a human readable character file, optionally 
+#id also like to have all the actions you can take by default 
+#as buttons to preform, with any bonuses as easy add ons to the roll
 #and then even more optionally have the outcome print out to whatever 
 #VTT were using
 #
-#style note, try not to go much further than 3 deep 
-#outside of simple if>then "check" statements 
-#such as if x > y and < z ... etc
+#note, i should figure out how to package this and to use inno or
+#something similar to automatically manage installation, instead of 
+#having to manually install pygame, maybe just a powershell/bash
+#script, dont know yet
 #
 import pygame
 #imports pygame to use its assets
@@ -17,7 +18,7 @@ import os
 #imports OS specific stuff to be more cross compatable
 import random
 #hehe
-WIDTH, HEIGHT = 500,700
+WIDTH, HEIGHT = 600,300
 #this is window size
 WIN = pygame.display.set_mode((WIDTH,HEIGHT))
 #this acts as the window to more easily edit
@@ -37,15 +38,32 @@ MAXFPS = 13
 layer = 0
 
 something = [False,False,False,False]
-
+def textbox(text,color,height,padding):
+        text_c =WIDTH /2 - len(text)*7 
+        padding2 = padding*2
+        text_rect =pygame.Rect((text_c-padding,height+3-padding/2),(len(text)*14+padding2  ,padding+24))
+        pygame.draw.rect(WIN,((color)),text_rect)
+        draw_text(text,WIDTH /2 - len(text)/2 *14,height)
+	
+	
+	
+	
+	
+	
+	
 def button_event(button_num):
 	global layer 
+	global WIDTH,HEIGHT
 	if button_num == 0:
 		layer = 1
+		WIDTH,HEIGHT=600,300
+		pygame.display.set_mode((WIDTH,HEIGHT))
 	if button_num == 1:
 		print("gooboo")
 	if button_num == 3:
 		layer = 0
+		WIDTH,HEIGHT=400,300
+		pygame.display.set_mode((WIDTH,HEIGHT))
 		
 
 def button_hitbox (borderX_min,borderY_min,borderX_max,borderY_max,button_num):
@@ -57,9 +75,7 @@ def button_hitbox (borderX_min,borderY_min,borderX_max,borderY_max,button_num):
 			pygame.event.get()
 			if pygame.mouse.get_pressed(num_buttons=3)[0]:
 				something[button_num] = True
-				#if pygame.event.get() == pygame.MOUSEBUTTONDOWN:
-				
-				print(str(button_num))
+				print(str("mouse 1 down"))
 			elif something[button_num] == True:
 				if pygame.mouse.get_pressed(num_buttons=3)[0] == False:
 					button_event(button_num)
@@ -68,21 +84,18 @@ def button_hitbox (borderX_min,borderY_min,borderX_max,borderY_max,button_num):
 			something[button_num] = False
 	else:
 		something[button_num] = False
-#set something false by default then true on click and then false only 
-#on release or moving out of the hitbox, and switching layers
 #how to make it controllable per button, in a less stupid way
-#check to see if M1 was being held down
+#check to see if M1 was being held down before going in the box, somehow
 
 def button (text,rect_H,button_num,layer_num):
 	global something 
-	global layer
+	# ~ global layer
 			
 	if layer == layer_num:
 		rect_hight = 50
 		text_center = WIDTH /2 - len(text)/2 *14
 		rect_L =text_center -15 
 		rect_W =WIDTH - text_center*2+30 
-		
 		text_rect = pygame.Rect(( text_center - 15,rect_H),(rect_W, rect_hight))
 		pygame.draw.rect(WIN,(BUTTONBGCOLOUR),text_rect)
 		button_hitbox(rect_L,rect_H,rect_W+rect_L,rect_H+rect_hight,button_num)
@@ -95,8 +108,9 @@ def draw_text (text,x,y):
 
 	img = font.render(text,True,TEXT_COL)
 	WIN.blit(img,(x,y))
-
-
+#blit draws an image to the screen, 
+#it takes an source image and cords as input
+        
 
 def draw_window():
 #contains things we write to the screen
@@ -106,12 +120,11 @@ def draw_window():
         button(str(min(random.randint(0,10000),random.randint(0,10000))),220,1,0)
         button("menu "+str(random.randint(1,5))+ " the again",120,2,1)
         button("wait, no let me go back",220,3,1)
+        textbox("geeglorp",(80,80,80),50,10)
 
-#this is no longer used but is still here
-#so that i dont have to refrence the docs
-#blit draws an image to the screen, 
-#it takes an source image and cords as input
-        
+#text wall style button option, no click functionality, 
+#just text and bg + padding, maybe scroll?
+
 
 
 def main():
