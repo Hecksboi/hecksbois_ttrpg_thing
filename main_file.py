@@ -18,7 +18,7 @@ import os
 #imports OS specific stuff to be more cross compatable
 import random
 #hehe
-WIDTH, HEIGHT = 600,300
+WIDTH, HEIGHT = 400,600
 #this is window size
 WIN = pygame.display.set_mode((WIDTH,HEIGHT))
 #this acts as the window to more easily edit
@@ -36,15 +36,30 @@ font = pygame.font.SysFont("cascadia-code",FONTSIZE)
 MAXFPS = 13
 #sets the maximum fps
 layer = 0
+something = []
+for x in range(1,255):
+	something.append(False)
 
-something = [False,False,False,False]
-def textbox(text,color,height,padding):
-        text_c =WIDTH /2 - len(text)*7 
-        padding2 = padding*2
-        text_rect =pygame.Rect((text_c-padding,height+3-padding/2),(len(text)*14+padding2  ,padding+24))
-        pygame.draw.rect(WIN,((color)),text_rect)
-        draw_text(text,WIDTH /2 - len(text)/2 *14,height)
-	
+def textbox(text,color,height,padding,layer_num):
+	if layer == layer_num:
+		x=0
+		for nuts in text:
+			if x != 0:
+				height += 25
+				padding_height = 0
+				padding_height_pos = 0
+			else:
+				padding_height = padding
+			text_c =WIDTH /2 - len(text[0])*7 
+			padding2 = padding*2
+			text_rect =pygame.Rect((text_c-padding,height+3-padding_height/2),(len(text[0])*14+padding2  ,padding_height+24))
+			pygame.draw.rect(WIN,((color)),text_rect)
+			draw_text(text[x],WIDTH /2 - len(text[0])/2 *14,height)
+			print(len(text))			
+			x += 1  
+#make this better by just adding to a value per line added for drawing
+#the backround box, instead of calling multiple box draws
+			
 	
 	
 	
@@ -54,17 +69,20 @@ def textbox(text,color,height,padding):
 def button_event(button_num):
 	global layer 
 	global WIDTH,HEIGHT
-	if button_num == 0:
+	if button_num == 0 or 8 or 9 or 10:
 		layer = 1
-		WIDTH,HEIGHT=600,300
-		pygame.display.set_mode((WIDTH,HEIGHT))
 	if button_num == 1:
 		print("gooboo")
 	if button_num == 3:
 		layer = 0
-		WIDTH,HEIGHT=400,300
-		pygame.display.set_mode((WIDTH,HEIGHT))
-		
+	if button_num == 4:
+		pygame.quit()
+	if button_num == 5:
+		layer = 2
+	if button_num == 6:
+		layer = 3
+	if button_num == 7:
+		layer = 4
 
 def button_hitbox (borderX_min,borderY_min,borderX_max,borderY_max,button_num):
 	global something
@@ -75,7 +93,6 @@ def button_hitbox (borderX_min,borderY_min,borderX_max,borderY_max,button_num):
 			pygame.event.get()
 			if pygame.mouse.get_pressed(num_buttons=3)[0]:
 				something[button_num] = True
-				print(str("mouse 1 down"))
 			elif something[button_num] == True:
 				if pygame.mouse.get_pressed(num_buttons=3)[0] == False:
 					button_event(button_num)
@@ -116,11 +133,33 @@ def draw_window():
 #contains things we write to the screen
         WIN.fill((MAINBGCOLOUR))
         #sets the bg colour of the window
-        button("mouse pos" + str(pygame.mouse.get_pos()),120,0,0)
-        button(str(min(random.randint(0,10000),random.randint(0,10000))),220,1,0)
-        button("menu "+str(random.randint(1,5))+ " the again",120,2,1)
-        button("wait, no let me go back",220,3,1)
-        textbox("geeglorp",(80,80,80),50,10)
+        textbox(["Zomboi's TTRPG"],(80,80,80),50,10,0)
+        
+        button("Learn The Rules",120,0,0)
+        button("Create a Character Sheet",220,1,0)
+        
+        textbox(["Rules"],(80,80,80),50,10,1)
+        button("Basic Rules",120,5,1)
+        button("Major Stats",200,6,1)
+        button("Minor Stats",280,7,1)
+        
+        textbox(["rules -> basic rules"],(80,80,80),50,10,2)
+        button("back",520,8,2)
+        textbox(["long ass block of text","with a seccond one and","and a third"],(80,50,50),100,10,2)
+        
+        textbox(["rules -> Major Stats"],(80,80,80),50,10,3)
+        button("back",520,9,3)
+        
+        textbox(["rules -> Minor Stats"],(80,80,80),50,10,4)
+        button("back",520,10,4)
+
+#
+
+        button("exit",520,4,0)
+        button("back",520,3,1)
+        
+        
+        
 
 #text wall style button option, no click functionality, 
 #just text and bg + padding, maybe scroll?
